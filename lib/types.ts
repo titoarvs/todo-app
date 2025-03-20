@@ -1,3 +1,4 @@
+import { Bold } from "lucide-react";
 import { z } from "zod";
 
 // Zod schema for todo validation
@@ -14,6 +15,7 @@ export const createTodoSchema = z.object({
 export const updateTodoSchema = z.object({
   id: z.number(),
   text: z.string().min(1, "Task cannot be empty"),
+  completed: z.boolean(),
 });
 
 // TypeScript types derived from Zod schemas

@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import type { Todo, CreateTodoInput } from "@/lib/types";
+import type { Todo, CreateTodoInput, UpdateTodoInput } from "@/lib/types";
 
 export async function getTodos(): Promise<Todo[]> {
   try {
@@ -33,12 +33,33 @@ export async function createTodo(todo: CreateTodoInput): Promise<Todo> {
   }
 }
 
-export async function updateTodo(
-  id: number,
-  updates: Partial<Omit<Todo, "id">>
-): Promise<void> {
+export async function updateTodo({ id, text }: UpdateTodoInput): Promise<void> {
   try {
-    const { error } = await supabase.from("todos").update(updates).eq("id", id);
+    const { error } = await supabase
+      .from("todos")
+      .update({ text })
+      .eq("id", id);
+    if (error) throw error;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Todo could not be updated");
+  }
+}
+
+export async function updateToggle(id: number): Promise<void> {
+  try {
+    const { data, error: fetchError } = await supabase
+      .from("todos")
+      .select("completed")
+      .eq("id", id)
+      .single();
+    if (fetchError) throw fetchError;
+    if (!data) throw new Error("Todo not found");
+
+    const { error } = await supabase
+      .from("todos")
+      .update({ completed: !data.completed })
+      .eq("id", id);
     if (error) throw error;
   } catch (error) {
     console.error(error);

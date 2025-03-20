@@ -40,6 +40,7 @@ export function TodoItem({
     defaultValues: {
       id: todo.id,
       text: todo.text,
+      completed: todo.completed,
     },
   });
 

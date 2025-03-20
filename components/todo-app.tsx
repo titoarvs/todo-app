@@ -16,10 +16,10 @@ export default function TodoApp() {
     activeTodos,
     addTodo,
     toggleTodo,
-    editTodo,
-    deleteTodo,
+    updateMutation: editTodo,
+    deleteMutation: deleteTodo,
     isLoading,
-  } = useTodos(filter);
+  } = useTodos(filter, ["todos"]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
